@@ -56,14 +56,20 @@ export async function getDashboard(
         }
       : {};
 
-  const { data, error } =
+
+  const {
+    data,
+    error
+  } =
     await supabase.rpc(
       "get_dashboard",
       params
     );
 
+
   if (error)
     throw error;
+
 
   return data[0];
 }
@@ -228,6 +234,48 @@ export async function setSavingsGoal(amount) {
         user_id: user.id,
         savings_goal: amount
       });
+
+  if (error)
+    throw error;
+}
+
+// ============================================================
+// Manual Savings Adjustment
+// ============================================================
+
+export async function setSavingsAdjustment(
+  amount
+) {
+
+  const user =
+    await getUser();
+
+
+  if (!user)
+    throw new Error(
+      "Not logged in"
+    );
+
+
+  const {
+    error
+  } =
+    await supabase
+      .from("settings")
+      .upsert(
+        {
+          user_id:
+            user.id,
+
+          savings_adjustment:
+            amount
+        },
+        {
+          onConflict:
+            "user_id"
+        }
+      );
+
 
   if (error)
     throw error;

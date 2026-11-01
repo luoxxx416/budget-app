@@ -9,7 +9,8 @@ import {
   updateExpense,
   deleteExpense,
   setMonthlyBudget,
-  setSavingsGoal
+  setSavingsGoal,
+  setSavingsAdjustment
 } from "./database.js";
 
 
@@ -80,8 +81,6 @@ function updateMonthDisplay() {
       1
     );
 
-
-  // Do not allow future months.
 
   $("nextMonth").disabled =
     selectedMonth >=
@@ -154,10 +153,6 @@ async function refresh() {
   updateMonthDisplay();
 
 
-  // ----------------------------------------------------------
-  // Dashboard
-  // ----------------------------------------------------------
-
   const dashboard =
     await getDashboard(
       month
@@ -176,12 +171,9 @@ async function refresh() {
     );
 
 
-  // IMPORTANT:
-  //
-  // total_savings already represents savings from
-  // COMPLETED months.
-  //
-  // Do NOT add this month's remaining money.
+  // Total Savings =
+  // completed months
+  // + manual adjustment
 
   $("savings").textContent =
     money(
@@ -197,9 +189,9 @@ async function refresh() {
     dashboard.savings_goal;
 
 
-  // ----------------------------------------------------------
-  // Transactions
-  // ----------------------------------------------------------
+  $("adjustmentInput").value =
+    dashboard.savings_adjustment;
+
 
   const expenses =
     await getExpenses(
@@ -228,22 +220,7 @@ $("previousMonth").onclick =
       );
 
 
-    try {
-
-      await refresh();
-
-    } catch (error) {
-
-      console.error(
-        error
-      );
-
-
-      alert(
-        "Database error: " +
-        error.message
-      );
-    }
+    await refresh();
   };
 
 
@@ -272,32 +249,15 @@ $("nextMonth").onclick =
 
     if (
       next > currentMonth
-    ) {
-
+    )
       return;
-    }
 
 
     selectedMonth =
       next;
 
 
-    try {
-
-      await refresh();
-
-    } catch (error) {
-
-      console.error(
-        error
-      );
-
-
-      alert(
-        "Database error: " +
-        error.message
-      );
-    }
+    await refresh();
   };
 
 
@@ -343,10 +303,6 @@ function renderTransactions(
       "transaction";
 
 
-    // --------------------------------------------------------
-    // Left Side
-    // --------------------------------------------------------
-
     const info =
       document.createElement(
         "div"
@@ -369,10 +325,6 @@ function renderTransactions(
       </div>
     `;
 
-
-    // --------------------------------------------------------
-    // Right Side
-    // --------------------------------------------------------
 
     const right =
       document.createElement(
@@ -399,10 +351,6 @@ function renderTransactions(
     `;
 
 
-    // --------------------------------------------------------
-    // Delete
-    // --------------------------------------------------------
-
     right
       .querySelector(
         ".delete"
@@ -414,10 +362,8 @@ function renderTransactions(
             !confirm(
               "Delete this expense?"
             )
-          ) {
-
+          )
             return;
-          }
 
 
           await deleteExpense(
@@ -428,10 +374,6 @@ function renderTransactions(
           await refresh();
         };
 
-
-    // --------------------------------------------------------
-    // Edit
-    // --------------------------------------------------------
 
     right
       .querySelector(
@@ -449,10 +391,8 @@ function renderTransactions(
 
           if (
             value === null
-          ) {
-
+          )
             return;
-          }
 
 
           const amount =
@@ -595,23 +535,15 @@ $("addExpenseButton").onclick =
 
     await addExpense({
 
-      amount:
-
-        amount,
-
+      amount,
 
       category:
-
         $("categoryInput").value,
 
-
       description:
-
         $("descriptionInput").value,
 
-
       date:
-
         $("dateInput").value
     });
 
@@ -656,8 +588,6 @@ $("saveBudget").onclick =
       return;
     }
 
-
-    // Save budget for the month currently being viewed.
 
     await setMonthlyBudget(
       value,
@@ -708,6 +638,42 @@ $("saveGoal").onclick =
 
 
 // ============================================================
+// Manual Savings Adjustment
+// ============================================================
+
+$("saveAdjustment").onclick =
+  async () => {
+
+    const value =
+      Number(
+        $("adjustmentInput").value
+      );
+
+
+    if (
+      !Number.isFinite(
+        value
+      )
+    ) {
+
+      alert(
+        "Invalid savings adjustment"
+      );
+
+      return;
+    }
+
+
+    await setSavingsAdjustment(
+      value
+    );
+
+
+    await refresh();
+  };
+
+
+// ============================================================
 // Show App
 // ============================================================
 
@@ -721,8 +687,6 @@ async function showApp() {
     false;
 
 
-  // Always start from the current month.
-
   const now =
     new Date();
 
@@ -734,8 +698,6 @@ async function showApp() {
       1
     );
 
-
-  // New expenses default to today.
 
   $("dateInput").value =
     localDateString();

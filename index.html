@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
+
   <meta charset="UTF-8">
 
   <meta
@@ -10,57 +10,108 @@
     content="width=device-width, initial-scale=1.0"
   >
 
-  <title>Budget</title>
+  <title>Budget Logger</title>
 
   <link
     rel="stylesheet"
-    href="style.css"
+    href="./style.css"
   >
+
 </head>
+
 
 <body>
 
-<div class="container">
 
-  <!-- ====================================================== -->
-  <!-- LOGIN -->
-  <!-- ====================================================== -->
+  <!-- ======================================================
+       LOGIN
+       ====================================================== -->
 
-  <section id="loginView" class="card">
+  <main
+    id="loginView"
+    class="login-container"
+    hidden
+  >
 
-    <h1>Budget</h1>
+    <section class="login-card">
 
-    <input
-      id="email"
-      type="email"
-      placeholder="Email"
-    >
-
-    <input
-      id="password"
-      type="password"
-      placeholder="Password"
-    >
-
-    <button id="loginButton">
-      Sign In
-    </button>
-
-    <p id="loginError" class="error"></p>
-
-  </section>
+      <h1>
+        Budget Logger
+      </h1>
 
 
-  <!-- ====================================================== -->
-  <!-- APP -->
-  <!-- ====================================================== -->
+      <p>
+        Sign in to manage your budget.
+      </p>
 
-  <main id="appView" hidden>
+
+      <label for="email">
+        Email
+      </label>
+
+      <input
+        id="email"
+        type="email"
+        autocomplete="email"
+        placeholder="Email"
+      >
+
+
+      <label for="password">
+        Password
+      </label>
+
+      <input
+        id="password"
+        type="password"
+        autocomplete="current-password"
+        placeholder="Password"
+      >
+
+
+      <button
+        id="loginButton"
+        type="button"
+      >
+        Sign In
+      </button>
+
+
+      <p
+        id="loginError"
+        class="error"
+      ></p>
+
+    </section>
+
+  </main>
+
+
+
+  <!-- ======================================================
+       APP
+       ====================================================== -->
+
+  <main
+    id="appView"
+    hidden
+  >
+
+
+    <!-- ====================================================
+         HEADER
+         ==================================================== -->
 
     <header>
 
       <div>
-        <h1>My Budget</h1>
+
+        <h1>
+          My Budget
+        </h1>
+
+
+        <!-- Month Navigation -->
 
         <div class="month-navigation">
 
@@ -68,26 +119,35 @@
             id="previousMonth"
             class="month-button"
             type="button"
+            aria-label="Previous month"
           >
             ‹
           </button>
 
-          <p id="monthName"></p>
+
+          <p id="monthName">
+            Month
+          </p>
+
 
           <button
             id="nextMonth"
             class="month-button"
             type="button"
+            aria-label="Next month"
           >
             ›
           </button>
 
         </div>
+
       </div>
+
 
       <button
         id="logoutButton"
         class="secondary"
+        type="button"
       >
         Sign Out
       </button>
@@ -95,15 +155,21 @@
     </header>
 
 
-    <!-- ==================================================== -->
-    <!-- SUMMARY -->
-    <!-- ==================================================== -->
 
-    <section class="summary">
+    <!-- ====================================================
+         DASHBOARD SUMMARY
+         ==================================================== -->
 
-      <div class="card stat">
+    <section class="summary-grid">
 
-        <span>Spent</span>
+
+      <!-- Spent -->
+
+      <div class="summary-card">
+
+        <span class="summary-label">
+          Spent
+        </span>
 
         <strong id="spent">
           $0.00
@@ -112,9 +178,14 @@
       </div>
 
 
-      <div class="card stat">
 
-        <span>Remaining</span>
+      <!-- Remaining -->
+
+      <div class="summary-card">
+
+        <span class="summary-label">
+          Remaining
+        </span>
 
         <strong id="remaining">
           $0.00
@@ -123,9 +194,14 @@
       </div>
 
 
-      <div class="card stat">
 
-        <span>Total Savings</span>
+      <!-- Total Savings -->
+
+      <div class="summary-card">
+
+        <span class="summary-label">
+          Total Savings
+        </span>
 
         <strong id="savings">
           $0.00
@@ -133,92 +209,203 @@
 
       </div>
 
-    </section>
-
-
-    <!-- ==================================================== -->
-    <!-- SETTINGS -->
-    <!-- ==================================================== -->
-
-    <section class="card">
-
-      <h2>Settings</h2>
-
-      <label>
-        Monthly Budget
-      </label>
-
-      <div class="row">
-
-        <input
-          id="budgetInput"
-          type="number"
-          step="0.01"
-        >
-
-        <button id="saveBudget">
-          Save
-        </button>
-
-      </div>
-
-
-      <label>
-        Total Savings Goal
-      </label>
-
-      <div class="row">
-
-        <input
-          id="goalInput"
-          type="number"
-          step="0.01"
-        >
-
-        <button id="saveGoal">
-          Save
-        </button>
-
-      </div>
 
     </section>
 
 
-    <!-- ==================================================== -->
-    <!-- ADD EXPENSE -->
-    <!-- ==================================================== -->
+
+    <!-- ====================================================
+         SETTINGS
+         ==================================================== -->
 
     <section class="card">
 
-      <h2>Add Expense</h2>
+      <h2>
+        Settings
+      </h2>
 
-      <label>Amount</label>
+
+
+      <!-- Monthly Budget -->
+
+      <div class="setting-row">
+
+        <label for="budgetInput">
+          Monthly Budget
+        </label>
+
+
+        <div class="setting-control">
+
+          <input
+            id="budgetInput"
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="0.00"
+          >
+
+
+          <button
+            id="saveBudget"
+            type="button"
+          >
+            Save
+          </button>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- Savings Goal -->
+
+      <div class="setting-row">
+
+        <label for="goalInput">
+          Savings Goal
+        </label>
+
+
+        <div class="setting-control">
+
+          <input
+            id="goalInput"
+            type="number"
+            min="0"
+            step="0.01"
+            placeholder="0.00"
+          >
+
+
+          <button
+            id="saveGoal"
+            type="button"
+          >
+            Save
+          </button>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- Manual Savings Adjustment -->
+
+      <div class="setting-row">
+
+        <label for="adjustmentInput">
+          Manual Savings Adjustment
+        </label>
+
+
+        <div class="setting-control">
+
+          <input
+            id="adjustmentInput"
+            type="number"
+            step="0.01"
+            placeholder="0.00"
+          >
+
+
+          <button
+            id="saveAdjustment"
+            type="button"
+          >
+            Save
+          </button>
+
+        </div>
+
+
+        <small>
+          Add extra savings with a positive number,
+          or record a withdrawal with a negative number.
+        </small>
+
+      </div>
+
+
+    </section>
+
+
+
+    <!-- ====================================================
+         ADD EXPENSE
+         ==================================================== -->
+
+    <section class="card">
+
+      <h2>
+        Add Expense
+      </h2>
+
+
+      <!-- Amount -->
+
+      <label for="amountInput">
+        Amount
+      </label>
 
       <input
         id="amountInput"
         type="number"
+        min="0"
         step="0.01"
+        inputmode="decimal"
         placeholder="0.00"
       >
 
 
-      <label>Category</label>
+
+      <!-- Category -->
+
+      <label for="categoryInput">
+        Category
+      </label>
 
       <select id="categoryInput">
 
-        <option>Food</option>
-        <option>Grocery</option>
-        <option>Restaurant</option>
-        <option>Transportation</option>
-        <option>Shopping</option>
-        <option>Entertainment</option>
-        <option>Bills</option>
-        <option>Other</option>
+        <option value="Food">
+          Food
+        </option>
+
+        <option value="Transportation">
+          Transportation
+        </option>
+
+        <option value="Shopping">
+          Shopping
+        </option>
+
+        <option value="Entertainment">
+          Entertainment
+        </option>
+
+        <option value="Bills">
+          Bills
+        </option>
+
+        <option value="Health">
+          Health
+        </option>
+
+        <option value="Other">
+          Other
+        </option>
 
       </select>
 
 
-      <label>Description</label>
+
+      <!-- Description -->
+
+      <label for="descriptionInput">
+        Description
+      </label>
 
       <input
         id="descriptionInput"
@@ -227,7 +414,12 @@
       >
 
 
-      <label>Date</label>
+
+      <!-- Date -->
+
+      <label for="dateInput">
+        Date
+      </label>
 
       <input
         id="dateInput"
@@ -235,33 +427,60 @@
       >
 
 
-      <button id="addExpenseButton">
+
+      <!-- Add -->
+
+      <button
+        id="addExpenseButton"
+        type="button"
+      >
         Add Expense
       </button>
 
     </section>
 
 
-    <!-- ==================================================== -->
-    <!-- TRANSACTIONS -->
-    <!-- ==================================================== -->
+
+    <!-- ====================================================
+         TRANSACTIONS
+         ==================================================== -->
 
     <section class="card">
 
-      <h2>Transactions</h2>
+      <h2>
+        Transactions
+      </h2>
 
-      <div id="transactions"></div>
+
+      <div id="transactions">
+
+        <p>
+          No expenses this month.
+        </p>
+
+      </div>
 
     </section>
 
+
   </main>
 
-</div>
 
-<script
-  type="module"
-  src="app.js"
-></script>
+
+  <!-- ======================================================
+       JAVASCRIPT
+       ====================================================== -->
+
+  <script
+    src="./config.js"
+  ></script>
+
+
+  <script
+    type="module"
+    src="./app.js"
+  ></script>
+
 
 </body>
 
