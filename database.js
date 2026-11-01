@@ -35,10 +35,32 @@ export async function getUser() {
 // Dashboard
 // ============================================================
 
-export async function getDashboard() {
+// export async function getDashboard() {
+
+//   const { data, error } =
+//     await supabase.rpc("get_dashboard");
+
+//   if (error)
+//     throw error;
+
+//   return data[0];
+// }
+export async function getDashboard(
+  month = null
+) {
+
+  const params =
+    month
+      ? {
+          p_month: month
+        }
+      : {};
 
   const { data, error } =
-    await supabase.rpc("get_dashboard");
+    await supabase.rpc(
+      "get_dashboard",
+      params
+    );
 
   if (error)
     throw error;
